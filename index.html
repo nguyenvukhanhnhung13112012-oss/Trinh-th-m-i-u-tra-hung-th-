@@ -1,1 +1,1032 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ĐẤU TRÍ - Kẻ Lẩn Trốn</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+    --bg: #090e18;
+    --panel: #111b2a;
+    --panel2: #172438;
+    --gold: #d7b46a;
+    --text: #e9edf4;
+    --muted: #8996a9;
+    --red: #e45c64;
+    --green: #64c99a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 50% -20%, #243b56 0%, transparent 55%),
+        linear-gradient(135deg, #080d16, #101a2a 60%, #090e18);
+    color: var(--text);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    overflow-x: hidden;
+}
+
+button { font-family: inherit; }
+
+#app {
+    min-height: 100vh;
+    position: relative;
+}
+
+.topbar {
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    border-bottom: 1px solid #ffffff12;
+    background: #080e18b8;
+    backdrop-filter: blur(15px);
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 4px;
+    color: var(--gold);
+    font-size: 23px;
+}
+
+.logo span {
+    color: #fff;
+    font-size: 10px;
+    display: block;
+    letter-spacing: 5px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+.top-status {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.screen {
+    display: none;
+    animation: fade .5s ease;
+}
+
+.screen.active { display: block; }
+
+@keyframes fade {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.landing {
+    min-height: calc(100vh - 75px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 35px 20px;
+    background:
+        linear-gradient(90deg, #080e18e8, #080e1877, #080e18e8),
+        radial-gradient(ellipse at center, #31445c 0%, #0a111d 75%);
+}
+
+.landing-inner { max-width: 760px; }
+
+.eyebrow {
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 5px;
+    margin-bottom: 22px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 9vw, 100px);
+    letter-spacing: 5px;
+    margin: 0;
+    line-height: 1.1;
+    text-shadow: 0 8px 40px #000;
+}
+
+.landing h1 span { color: var(--gold); }
+
+.landing-desc {
+    color: #b2bdca;
+    line-height: 2;
+    margin: 25px auto 35px;
+    max-width: 570px;
+    font-size: 14px;
+}
+
+.primary-btn {
+    border: 1px solid var(--gold);
+    background: linear-gradient(135deg, #c39c51, #8c672d);
+    color: #10151e;
+    padding: 16px 40px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: .25s;
+    box-shadow: 0 8px 30px #bd97432b;
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px #bd974355;
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid #536278;
+    color: #d5dce7;
+    padding: 13px 24px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.secondary-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+.case-intro {
+    max-width: 850px;
+    margin: 65px auto;
+    padding: 0 22px;
+}
+
+.section-label {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 4px;
+}
+
+.case-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    margin: 15px 0;
+}
+
+.case-story {
+    color: #aab6c7;
+    line-height: 2;
+    font-size: 14px;
+    background: #121e2e;
+    border: 1px solid #ffffff13;
+    padding: 25px;
+    margin: 25px 0;
+    border-left: 3px solid var(--gold);
+}
+
+.case-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0 30px;
+}
+
+.meta-item {
+    background: #1b2a3e;
+    border: 1px solid #ffffff12;
+    padding: 10px 15px;
+    color: #aebacc;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.game-layout {
+    max-width: 1250px;
+    margin: 35px auto;
+    padding: 0 22px;
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    gap: 22px;
+}
+
+.panel {
+    background: linear-gradient(145deg, #172438, #101a29);
+    border: 1px solid #ffffff13;
+    border-radius: 5px;
+    padding: 22px;
+    box-shadow: 0 15px 40px #0002;
+}
+
+.panel-heading {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-bottom: 18px;
+    font-weight: 700;
+}
+
+.progress-box {
+    background: #0b1421;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.progress-top {
+    display: flex;
+    justify-content: space-between;
+    color: #aab6c7;
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+
+.progress-track {
+    height: 5px;
+    background: #27354a;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+    transition: width .4s;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #ffffff0e;
+    color: #9caabd;
+    font-size: 12px;
+}
+
+.stat-row strong { color: white; }
+
+.suspect-list {
+    display: grid;
+    gap: 10px;
+}
+
+.suspect {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #0c1624;
+    border: 1px solid #ffffff10;
+    transition: .2s;
+}
+
+.suspect:hover { border-color: #b89a5c77; }
+
+.avatar {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #455a73, #1b2b3e);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+}
+
+.suspect-name {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.suspect-role {
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+.question-panel {
+    min-height: 580px;
+}
+
+.question-number {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.question-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(25px, 4vw, 37px);
+    margin: 17px 0 12px;
+}
+
+.question-desc {
+    color: #9caabd;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.question-card {
+    padding: 23px;
+    background: #0b1522;
+    border: 1px solid #ffffff12;
+    margin-bottom: 18px;
+}
+
+.question-text {
+    font-size: 16px;
+    line-height: 1.8;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.answers {
+    display: grid;
+    gap: 10px;
+}
+
+.answer {
+    text-align: left;
+    padding: 15px 17px;
+    background: #17263a;
+    border: 1px solid #ffffff14;
+    color: #dce3ed;
+    cursor: pointer;
+    transition: .2s;
+    font-size: 13px;
+}
+
+.answer:hover:not(:disabled) {
+    background: #26364d;
+    border-color: var(--gold);
+    transform: translateX(4px);
+}
+
+.answer.correct {
+    background: #17382f;
+    border-color: var(--green);
+}
+
+.answer.wrong {
+    background: #3c2027;
+    border-color: var(--red);
+}
+
+.answer:disabled { cursor: default; opacity: .8; }
+
+.feedback {
+    display: none;
+    padding: 16px;
+    margin-top: 17px;
+    line-height: 1.8;
+    font-size: 13px;
+    border-left: 3px solid var(--green);
+    background: #17352d;
+    color: #d6f1e5;
+}
+
+.feedback.wrong-feedback {
+    border-color: var(--red);
+    background: #3a2027;
+    color: #f4d5d7;
+}
+
+.next-btn {
+    display: none;
+    margin-top: 20px;
+}
+
+.clue-box {
+    margin-top: 20px;
+    background: #0b1522;
+    border: 1px solid #ffffff12;
+    padding: 18px;
+}
+
+.clue-box h3 {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.clue-item {
+    color: #bdc8d6;
+    font-size: 12px;
+    line-height: 1.8;
+    padding: 10px 0;
+    border-bottom: 1px solid #ffffff0c;
+}
+
+.clue-item:last-child { border: 0; }
+
+.accuse-area {
+    display: none;
+    max-width: 850px;
+    margin: 60px auto;
+    padding: 0 22px;
+}
+
+.accuse-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+}
+
+.accuse-desc {
+    color: #9caabd;
+    line-height: 1.9;
+    font-size: 13px;
+}
+
+.accuse-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.accuse-card {
+    padding: 23px;
+    background: #142237;
+    border: 1px solid #ffffff16;
+    cursor: pointer;
+    text-align: left;
+    color: white;
+    transition: .2s;
+}
+
+.accuse-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+}
+
+.accuse-card.selected {
+    border-color: var(--gold);
+    background: #293044;
+}
+
+.accuse-card strong {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.accuse-card small {
+    color: var(--muted);
+}
+
+.result {
+    display: none;
+    max-width: 780px;
+    margin: 65px auto;
+    padding: 25px;
+    text-align: center;
+}
+
+.result-symbol {
+    font-size: 65px;
+    margin-bottom: 15px;
+}
+
+.result h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 43px;
+}
+
+.result-text {
+    color: #b4c0ce;
+    line-height: 2;
+    font-size: 14px;
+    margin: 25px auto;
+    max-width: 600px;
+}
+
+.score-number {
+    color: var(--gold);
+    font-size: 50px;
+    font-weight: 800;
+}
+
+.footer {
+    text-align: center;
+    color: #59677a;
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 30px;
+}
+
+@media(max-width: 800px) {
+    .game-layout { grid-template-columns: 1fr; }
+    .accuse-options { grid-template-columns: 1fr; }
+    .case-title { font-size: 32px; }
+    .panel { padding: 17px; }
+}
+</style>
+</head>
+
+<body>
+<div id="app">
+
+<header class="topbar">
+    <div class="logo">
+        NOIR
+        <span>DETECTIVE AGENCY</span>
+    </div>
+    <div class="top-status">HỒ SƠ ĐIỀU TRA № 047</div>
+</header>
+
+<!-- MÀN HÌNH CHÍNH -->
+<section id="home" class="screen active">
+    <div class="landing">
+        <div class="landing-inner">
+            <div class="eyebrow">A PSYCHOLOGICAL DETECTIVE GAME</div>
+            <h1>ĐẤU TRÍ:<br><span>KẺ LẨN TRỐN</span></h1>
+            <p class="landing-desc">
+                Bốn con người. Một lời nói dối. Một kẻ đang cố gắng
+                che giấu thân phận thật sự. Bạn có đủ khả năng
+                nhìn xuyên qua những lời khai giả tạo?
+            </p>
+            <button class="primary-btn" onclick="showCase()">
+                NHẬN HỒ SƠ ĐIỀU TRA →
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- GIỚI THIỆU VỤ ÁN -->
+<section id="case" class="screen">
+    <div class="case-intro">
+        <div class="section-label">HỒ SƠ MẬT / 047</div>
+        <div class="case-title">Vụ án tại biệt thự Blackwood</div>
+
+        <div class="case-story">
+            Đêm ngày 17 tháng 10, ông Adrian Blackwood, chủ nhân
+            của một biệt thự xa hoa, được phát hiện bất tỉnh trong
+            phòng làm việc. Một chiếc két sắt chứa tài liệu mật đã
+            bị mở, còn kẻ đột nhập biến mất không dấu vết.
+
+            <br><br>
+
+            Trong biệt thự đêm đó chỉ có bốn người:
+            quản gia, người cháu trai, nữ thư ký và người làm vườn.
+
+            <br><br>
+
+            Cảnh sát xác định thủ phạm vẫn đang ẩn náu trong
+            khu biệt thự. Tất cả đều có lời khai, nhưng có ít nhất
+            một người đang nói dối.
+        </div>
+
+        <div class="case-meta">
+            <div class="meta-item">4 NGHI PHẠM</div>
+            <div class="meta-item">5 CÂU HỎI</div>
+            <div class="meta-item">1 THỦ PHẠM</div>
+            <div class="meta-item">ĐỘ KHÓ: TRUNG BÌNH</div>
+        </div>
+
+        <button class="primary-btn" onclick="startGame()">
+            BẮT ĐẦU ĐIỀU TRA →
+        </button>
+    </div>
+</section>
+
+<!-- MÀN HÌNH ĐIỀU TRA -->
+<section id="game" class="screen">
+    <div class="game-layout">
+
+        <aside>
+            <div class="panel">
+                <div class="panel-heading">TIẾN ĐỘ ĐIỀU TRA</div>
+
+                <div class="progress-box">
+                    <div class="progress-top">
+                        <span>HOÀN THÀNH</span>
+                        <strong id="progressText">0 / 5</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="stat-row">
+                    <span>Điểm điều tra</span>
+                    <strong id="score">0</strong>
+                </div>
+                <div class="stat-row">
+                    <span>Trả lời đúng</span>
+                    <strong id="correctCount">0</strong>
+                </div>
+                <div class="stat-row">
+                    <span>Lượt điều tra</span>
+                    <strong id="attempts">5</strong>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-top:18px">
+                <div class="panel-heading">DANH SÁCH NGHI PHẠM</div>
+                <div class="suspect-list">
+                    <div class="suspect">
+                        <div class="avatar">🧔🏻</div>
+                        <div>
+                            <div class="suspect-name">Henry Miller</div>
+                            <div class="suspect-role">Quản gia · 52 tuổi</div>
+                        </div>
+                    </div>
+                    <div class="suspect">
+                        <div class="avatar">👨🏻</div>
+                        <div>
+                            <div class="suspect-name">Daniel Blackwood</div>
+                            <div class="suspect-role">Cháu trai · 25 tuổi</div>
+                        </div>
+                    </div>
+                    <div class="suspect">
+                        <div class="avatar">👩🏻</div>
+                        <div>
+                            <div class="suspect-name">Victoria Lane</div>
+                            <div class="suspect-role">Thư ký · 31 tuổi</div>
+                        </div>
+                    </div>
+                    <div class="suspect">
+                        <div class="avatar">👨🏽</div>
+                        <div>
+                            <div class="suspect-name">Thomas Reed</div>
+                            <div class="suspect-role">Người làm vườn · 43 tuổi</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="panel question-panel">
+            <div class="question-number" id="questionNumber">CÂU HỎI 01 / 05</div>
+            <div class="question-title">Phân tích lời khai</div>
+            <div class="question-desc">
+                Hãy suy luận cẩn thận. Mỗi lựa chọn đều có thể
+                giúp bạn tiến gần hơn đến sự thật.
+            </div>
+
+            <div class="question-card">
+                <div class="question-text" id="questionText"></div>
+                <div class="answers" id="answers"></div>
+                <div class="feedback" id="feedback"></div>
+                <button class="primary-btn next-btn" id="nextButton"
+                    onclick="nextQuestion()">TIẾP TỤC →</button>
+            </div>
+
+            <div class="clue-box">
+                <h3>✦ MANH MỐI ĐÃ THU THẬP</h3>
+                <div id="clues">
+                    <div class="clue-item">Chưa có manh mối nào.</div>
+                </div>
+            </div>
+        </main>
+    </div>
+</section>
+
+<!-- BUỘC TỘI -->
+<section id="accuse" class="screen">
+    <div class="accuse-area" style="display:block">
+        <div class="section-label">GIAI ĐOẠN CUỐI CÙNG</div>
+        <div class="accuse-title">Ai là kẻ lẩn trốn?</div>
+        <p class="accuse-desc">
+            Bạn đã thu thập đủ manh mối. Hãy đưa ra kết luận cuối cùng.
+            Hãy nhớ rằng: một lời khai mâu thuẫn không nhất thiết
+            đồng nghĩa với việc người đó là thủ phạm.
+        </p>
+
+        <div class="accuse-options" id="accuseOptions"></div>
+
+        <button class="primary-btn" onclick="submitAccusation()">
+            XÁC NHẬN KẾT LUẬN
+        </button>
+    </div>
+</section>
+
+<!-- KẾT QUẢ -->
+<section id="result" class="screen">
+    <div class="result" style="display:block">
+        <div class="result-symbol" id="resultSymbol">🔎</div>
+        <div class="section-label">HỒ SƠ ĐÃ KHÉP LẠI</div>
+        <h2 id="resultTitle"></h2>
+        <div class="score-number" id="finalScore">0</div>
+        <div class="result-text" id="resultText"></div>
+        <button class="primary-btn" onclick="restartGame()">ĐIỀU TRA LẠI</button>
+        <button class="secondary-btn" onclick="showHome()">TRỞ VỀ TRANG CHỦ</button>
+    </div>
+</section>
+
+<div class="footer">NOIR DETECTIVE AGENCY · CASE 047</div>
+</div>
+
+<script>
+const questions = [
+{
+    question: "Henry, người quản gia, nói rằng ông ở trong bếp từ 21:00 đến 22:00. Tuy nhiên, camera hành lang ghi nhận có người đi ngang phòng làm việc lúc 21:35. Điều gì cần được xác minh trước tiên?",
+    answers: [
+        "Kiểm tra xem Henry có thực sự ở trong bếp suốt thời gian đó không.",
+        "Kết luận ngay Henry là thủ phạm.",
+        "Bỏ qua lời khai của Henry.",
+        "Hỏi người làm vườn về thời tiết."
+    ],
+    correct: 0,
+    clue: "Camera ghi nhận một bóng người đi qua hành lang lúc 21:35. Chưa xác định được danh tính.",
+    explain: "Chính xác. Một lời khai cần được đối chiếu với bằng chứng độc lập. Chưa thể kết luận Henry có tội chỉ từ đoạn camera."
+},
+{
+    question: "Daniel nói rằng anh ta không hề vào phòng làm việc. Nhưng dấu vân tay của Daniel được tìm thấy trên ngăn kéo chiếc két sắt. Suy luận hợp lý nhất là gì?",
+    answers: [
+        "Daniel chắc chắn đã mở két.",
+        "Daniel từng tiếp xúc với ngăn kéo, nhưng cần xác định thời điểm.",
+        "Dấu vân tay chắc chắn là giả.",
+        "Daniel không thể liên quan đến vụ án."
+    ],
+    correct: 1,
+    clue: "Dấu vân tay của Daniel xuất hiện trên ngăn kéo két sắt. Nhưng dấu vân tay không xác định được thời điểm tiếp xúc.",
+    explain: "Đúng. Dấu vân tay là bằng chứng về sự tiếp xúc, không tự chứng minh thời điểm hay hành động phạm tội."
+},
+{
+    question: "Victoria khai rằng cô rời biệt thự lúc 20:30. Nhưng người lái xe xác nhận đã đưa cô về lúc 21:15. Chi tiết nào đáng nghi nhất?",
+    answers: [
+        "Cô ấy mặc áo màu đen.",
+        "Cô ấy là nữ thư ký.",
+        "Thời gian rời khỏi biệt thự trong lời khai không trùng khớp với lời tài xế.",
+        "Cô ấy biết chủ nhà."
+    ],
+    correct: 2,
+    clue: "Victoria nói dối về thời gian rời khỏi biệt thự. Cô có thể đang che giấu một việc gì đó.",
+    explain: "Chính xác. Mâu thuẫn thời gian cho thấy Victoria đang che giấu thông tin. Tuy nhiên, chưa đủ để khẳng định cô là thủ phạm."
+},
+{
+    question: "Thomas nói rằng anh ta ở ngoài vườn cả đêm. Nhưng một chiếc giày dính đất ẩm được tìm thấy gần phòng làm việc. Ngoài trời đêm đó mưa rất lớn. Điều gì đáng chú ý?",
+    answers: [
+        "Đất ẩm có thể liên quan đến người vừa đi từ khu vườn vào nhà.",
+        "Thomas chắc chắn là người đột nhập.",
+        "Không ai có thể đi vào nhà khi trời mưa.",
+        "Chiếc giày không có giá trị điều tra."
+    ],
+    correct: 0,
+    clue: "Dấu đất ẩm gần phòng làm việc có đặc điểm giống đất trong khu vườn.",
+    explain: "Đúng. Đây là dấu vết liên quan đến đường di chuyển. Tuy nhiên, cần kiểm tra kích thước và mẫu đất trước khi xác định người mang nó."
+},
+{
+    question: "Một mẩu giấy bị xé được tìm thấy trong lò sưởi. Phần chữ còn đọc được là: '... chìa khóa dự phòng ... 21:00'. Kết hợp với những lời khai trước đó, hướng điều tra tốt nhất là gì?",
+    answers: [
+        "Chỉ tập trung vào Daniel vì có dấu vân tay.",
+        "Kiểm tra ai có quyền tiếp cận chìa khóa dự phòng và ai có mặt lúc 21:00.",
+        "Bỏ qua tất cả lời khai.",
+        "Kết luận người làm vườn có tội vì có đất trên giày."
+    ],
+    correct: 1,
+    clue: "Chìa khóa dự phòng là yếu tố quan trọng. Người sử dụng nó có thể đã vào phòng mà không phá khóa.",
+    explain: "Chính xác. Những bằng chứng cần được kết nối với nhau. Chìa khóa dự phòng là manh mối có thể giải thích cách kẻ đột nhập vào phòng."
+}
+];
+
+const suspects = [
+    {
+        id: "henry",
+        name: "Henry Miller",
+        role: "Quản gia · 52 tuổi",
+        icon: "🧔🏻",
+        detail: "Người quản gia lâu năm, biết rõ mọi lối đi trong biệt thự."
+    },
+    {
+        id: "daniel",
+        name: "Daniel Blackwood",
+        role: "Cháu trai · 25 tuổi",
+        icon: "👨🏻",
+        detail: "Người thừa kế có quan hệ không tốt với ông Adrian."
+    },
+    {
+        id: "victoria",
+        name: "Victoria Lane",
+        role: "Thư ký · 31 tuổi",
+        icon: "👩🏻",
+        detail: "Người nắm giữ nhiều tài liệu và lịch trình của chủ nhà."
+    },
+    {
+        id: "thomas",
+        name: "Thomas Reed",
+        role: "Người làm vườn · 43 tuổi",
+        icon: "👨🏽",
+        detail: "Người có thể di chuyển giữa khu vườn và biệt thự."
+    }
+];
+
+// Thủ phạm của vụ án này.
+const culprit = "victoria";
+
+let current = 0;
+let score = 0;
+let correct = 0;
+let attempts = 5;
+let answered = false;
+let selectedSuspect = null;
+let collected = [];
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function showHome() {
+    showScreen('home');
+}
+
+function showCase() {
+    showScreen('case');
+}
+
+function startGame() {
+    current = 0;
+    score = 0;
+    correct = 0;
+    attempts = 5;
+    collected = [];
+    updateStats();
+    showScreen('game');
+    renderQuestion();
+}
+
+function renderQuestion() {
+    answered = false;
+
+    const q = questions[current];
+
+    document.getElementById('questionNumber').textContent =
+        `CÂU HỎI ${String(current + 1).padStart(2, '0')} / 05`;
+
+    document.getElementById('questionText').textContent = q.question;
+
+    const answers = document.getElementById('answers');
+    answers.innerHTML = '';
+
+    q.answers.forEach((answer, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer';
+        btn.textContent = String.fromCharCode(65 + index) + '. ' + answer;
+        btn.onclick = () => chooseAnswer(index, btn);
+        answers.appendChild(btn);
+    });
+
+    const feedback = document.getElementById('feedback');
+    feedback.style.display = 'none';
+    feedback.className = 'feedback';
+
+    document.getElementById('nextButton').style.display = 'none';
+}
+
+function chooseAnswer(index, button) {
+    if (answered) return;
+
+    answered = true;
+
+    const q = questions[current];
+    const buttons = document.querySelectorAll('.answer');
+
+    buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.correct) btn.classList.add('correct');
+    });
+
+    const feedback = document.getElementById('feedback');
+
+    if (index === q.correct) {
+        score += 100;
+        correct++;
+        button.classList.add('correct');
+
+        feedback.className = 'feedback';
+        feedback.innerHTML = '<strong>✓ SUY LUẬN CHÍNH XÁC</strong><br>' + q.explain;
+    } else {
+        attempts--;
+        button.classList.add('wrong');
+
+        feedback.className = 'feedback wrong-feedback';
+        feedback.innerHTML = '<strong>✕ SUY LUẬN CHƯA CHÍNH XÁC</strong><br>' + q.explain;
+    }
+
+    feedback.style.display = 'block';
+
+    collected.push(q.clue);
+    updateClues();
+    updateStats();
+
+    document.getElementById('nextButton').style.display = 'inline-block';
+}
+
+function updateStats() {
+    document.getElementById('score').textContent = score;
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('attempts').textContent = attempts;
+    document.getElementById('progressText').textContent =
+        `${current + (answered ? 1 : 0)} / 5`;
+
+    const progress = (current + (answered ? 1 : 0)) / 5 * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+}
+
+function updateClues() {
+    const box = document.getElementById('clues');
+
+    box.innerHTML = collected.map((clue, index) => `
+        <div class="clue-item">
+            <strong style="color:var(--gold)">MANH MỐI ${index + 1}</strong><br>
+            ${clue}
+        </div>
+    `).join('');
+}
+
+function nextQuestion() {
+    current++;
+
+    if (current >= questions.length) {
+        showAccusation();
+        return;
+    }
+
+    updateStats();
+    renderQuestion();
+}
+
+function showAccusation() {
+    showScreen('accuse');
+
+    const box = document.getElementById('accuseOptions');
+    box.innerHTML = '';
+    selectedSuspect = null;
+
+    suspects.forEach(suspect => {
+        const card = document.createElement('button');
+        card.className = 'accuse-card';
+
+        card.innerHTML = `
+            <div style="font-size:30px">${suspect.icon}</div>
+            <strong>${suspect.name}</strong>
+            <small>${suspect.role}</small>
+            <p style="color:#9caabd;font-size:11px;line-height:1.7">
+                ${suspect.detail}
+            </p>
+        `;
+
+        card.onclick = () => {
+            document.querySelectorAll('.accuse-card').forEach(c => {
+                c.classList.remove('selected');
+            });
+
+            card.classList.add('selected');
+            selectedSuspect = suspect.id;
+        };
+
+        box.appendChild(card);
+    });
+}
+
+function submitAccusation() {
+    if (!selectedSuspect) {
+        alert('Hãy chọn một nghi phạm trước khi kết luận.');
+        return;
+    }
+
+    showResult();
+}
+
+function showResult() {
+    showScreen('result');
+
+    const success = selectedSuspect === culprit;
+
+    let final = score;
+
+    if (success) final += 300;
+
+    document.getElementById('resultSymbol').textContent =
+        success ? '🏆' : '⚖️';
+
+    document.getElementById('resultTitle').textContent =
+        success ? 'VỤ ÁN ĐƯỢC PHÁ GIẢI' : 'KẾT LUẬN SAI LẦM';
+
+    document.getElementById('finalScore').textContent = final;
+
+    document.getElementById('resultText').innerHTML = success
+        ? `Xuất sắc, thám tử! Bạn đã xác định đúng <strong>Victoria Lane</strong>.<br><br>
+           Cô ta đã nói dối về thời gian rời khỏi biệt thự.
+           Với quyền tiếp cận lịch trình và chìa khóa dự phòng,
+           cô có cơ hội vào phòng làm việc mà không gây chú ý.
+           Những lời khai mâu thuẫn đã khiến cô trở thành tâm điểm
+           của cuộc điều tra.<br><br>
+           <strong>Điểm điều tra: ${correct}/5 câu đúng.</strong>`
+        : `Bạn đã kết luận nhầm người. Thủ phạm thực sự là
+           <strong>Victoria Lane</strong>.<br><br>
+           Cô ta đã nói dối về thời gian rời khỏi biệt thự,
+           đồng thời có quyền tiếp cận lịch trình và chìa khóa dự phòng.
+           Hãy xem lại những manh mối bạn đã thu thập.<br><br>
+           <strong>Điểm điều tra: ${correct}/5 câu đúng.</strong>`;
+}
+
+function restartGame() {
+    startGame();
+}
+</script>
+
+</body>
+</html>
+
