@@ -1,4 +1,642 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ĐẤU TRÍ — Hồ sơ 10 vụ án</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+  --bg:#080d17; --panel:#111d2d; --panel2:#18283c;
+  --gold:#d7b36b; --white:#edf1f7; --muted:#94a2b5;
+  --red:#d96a70; --green:#63c69b; --line:#ffffff16;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:
+  radial-gradient(ellipse at 50% -20%,#263b56,transparent 60%),
+  linear-gradient(135deg,#080d17,#101b2b 65%,#080d17);
+  color:var(--white);font-family:'Be Vietnam Pro',sans-serif;
+  min-height:100vh;
+}
+button{font:inherit}
+.top{
+  height:72px;padding:0 5%;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--line);
+  background:#080d17d9;backdrop-filter:blur(14px);
+  position:sticky;top:0;z-index:5;
+}
+.brand{font:700 23px 'Playfair Display';letter-spacing:4px;color:var(--gold)}
+.brand small{display:block;font:600 9px 'Be Vietnam Pro';letter-spacing:4px;color:#a8b5c5}
+.topright{font-size:11px;color:var(--muted);letter-spacing:2px}
+.screen{display:none;animation:appear .45s ease}
+.screen.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+button{cursor:pointer}
+.primary{
+  background:linear-gradient(135deg,#e0c17f,#a67c3e);color:#111827;
+  border:0;padding:15px 27px;font-weight:800;letter-spacing:1.5px;
+  transition:.2s;box-shadow:0 8px 28px #c59b4a25;
+}
+.primary:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.secondary{
+  background:transparent;border:1px solid #68788e;color:#dce4ef;
+  padding:12px 20px;transition:.2s
+}
+.secondary:hover{border-color:var(--gold);color:var(--gold)}
+.hero{
+  min-height:calc(100vh - 72px);display:grid;place-items:center;
+  text-align:center;padding:30px 20px;
+  background:linear-gradient(#08101c99,#08101ce8),
+  radial-gradient(ellipse at center,#40536c,#0a111d 70%);
+}
+.hero-inner{max-width:800px}
+.eyebrow{font-size:11px;letter-spacing:5px;color:var(--gold)}
+.hero h1{font:700 clamp(48px,9vw,100px)/1.05 'Playfair Display';letter-spacing:4px;margin:25px 0}
+.hero h1 span{color:var(--gold)}
+.hero p{color:#afbdcd;line-height:2;font-size:14px;max-width:600px;margin:25px auto 35px}
+.hero-mark{font-size:54px;opacity:.7;filter:drop-shadow(0 0 20px #d7b36b66)}
+.wrap{max-width:1200px;margin:38px auto;padding:0 20px}
+.panel{
+  background:linear-gradient(145deg,#17263a,#101a29);
+  border:1px solid var(--line);padding:23px;border-radius:5px;
+  box-shadow:0 15px 40px #0003;
+}
+.label{font-size:10px;color:var(--gold);letter-spacing:3px;font-weight:700}
+.case-title{font:700 clamp(30px,5vw,48px) 'Playfair Display';margin:14px 0}
+.muted{color:var(--muted);line-height:1.9;font-size:13px}
+.case-meta{display:flex;gap:9px;flex-wrap:wrap;margin:22px 0}
+.tag{background:#203149;border:1px solid var(--line);padding:8px 12px;color:#c6d1df;font-size:10px;letter-spacing:1px}
+.gamegrid{display:grid;grid-template-columns:290px minmax(0,1fr);gap:20px}
+.stat{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.stat strong{color:white}
+.track{height:5px;background:#2a394d;margin:10px 0 16px}
+.fill{height:100%;width:0;background:var(--gold);transition:.4s}
+.case-list{display:grid;gap:8px;margin-top:15px}
+.case-row{
+  padding:11px 12px;background:#0d1725;border:1px solid var(--line);
+  display:flex;gap:10px;align-items:center;font-size:11px;color:#9eacbe;
+}
+.case-row.current{border-color:var(--gold);color:white;background:#26344a}
+.case-row.done{border-color:#4a9e7d;color:#9bd9bd}
+.case-row .num{font-weight:800;color:var(--gold)}
+.mainpanel{min-height:620px}
+.qtop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.qtitle{font:700 34px 'Playfair Display';margin:15px 0}
+.question{
+  padding:22px;background:#0b1523;border:1px solid var(--line);
+  margin:20px 0;line-height:2;font-size:14px;color:#dce4ee;
+}
+.options{display:grid;gap:10px}
+.option{
+  padding:15px 17px;text-align:left;color:#dbe4ef;
+  background:#19283d;border:1px solid #ffffff17;
+  font-size:13px;line-height:1.7;transition:.2s;
+}
+.option:hover:not(:disabled){border-color:var(--gold);background:#243750;transform:translateX(3px)}
+.option.correct{border-color:var(--green);background:#15382e}
+.option.wrong{border-color:var(--red);background:#3a2029}
+.option:disabled{cursor:default}
+.feedback{display:none;margin-top:17px;padding:17px;line-height:1.8;font-size:13px;background:#17362e;border-left:3px solid var(--green)}
+.feedback.bad{background:#3b2229;border-color:var(--red)}
+.feedback strong{display:block;margin-bottom:6px}
+.next{display:none;margin-top:18px}
+.clues{margin-top:20px;padding:18px;background:#0b1523;border:1px solid var(--line)}
+.clues h3{font-size:10px;color:var(--gold);letter-spacing:3px}
+.clue{padding:10px 0;border-bottom:1px solid var(--line);font-size:12px;line-height:1.8;color:#b7c4d3}
+.clue:last-child{border:0}
+.character{
+  display:flex;align-items:center;gap:14px;padding:15px;
+  background:#0b1523;border:1px solid var(--line);margin-top:17px;
+}
+.portrait{
+  width:82px;height:100px;flex-shrink:0;position:relative;
+  display:grid;place-items:center;overflow:hidden;
+  background:linear-gradient(145deg,#40536b,#101b2c);
+  border:1px solid #d7b36b55;
+}
+.portrait svg{width:80px;height:100px;animation:float 3s ease-in-out infinite;transform-origin:center}
+@keyframes float{0%,100%{transform:translateY(2px)}50%{transform:translateY(-4px)}}
+.portrait .scan{position:absolute;inset:0;background:linear-gradient(transparent 45%,#d7b36b16 50%,transparent 55%);animation:scan 4s linear infinite}
+@keyframes scan{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+.character strong{font-size:13px}
+.character p{font-size:11px;color:var(--muted);line-height:1.7;margin:5px 0}
+.result{text-align:center;max-width:750px;margin:70px auto;padding:25px}
+.result h2{font:700 40px 'Playfair Display'}
+.score{font-size:55px;color:var(--gold);font-weight:800}
+.levelgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:25px 0}
+.level{
+  background:#152439;border:1px solid var(--line);padding:14px 5px;
+  text-align:center;color:#bdc9d7;font-size:11px
+}
+.level.unlocked{border-color:var(--gold);color:var(--gold)}
+.level.done{border-color:#4b9c7c;color:#8bd6b1}
+.level b{display:block;font-size:20px;margin-bottom:7px}
+@media(max-width:850px){
+ .gamegrid{grid-template-columns:1fr}
+ .levelgrid{grid-template-columns:repeat(2,1fr)}
+ .mainpanel{min-height:0}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">NOIR<small>DETECTIVE AGENCY</small></div>
+  <div class="topright" id="headerStatus">HỒ SƠ ĐẶC BIỆT · 10 VỤ ÁN</div>
+</header>
+
+<section id="home" class="screen active">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-mark">♜</div>
+      <div class="eyebrow">A TRUE CRIME INVESTIGATION GAME</div>
+      <h1>ĐẤU TRÍ:<br><span>HỒ SƠ 10 VỤ ÁN</span></h1>
+      <p>
+        Mười vụ án có thật. Hàng chục dữ kiện lịch sử.
+        Những lời khai, dấu vết và bí ẩn chưa có lời giải.
+        Hãy suy nghĩ như một điều tra viên: đừng tin vào điều
+        bạn muốn tin, hãy tin vào điều chứng cứ thực sự cho thấy.
+      </p>
+      <button class="primary" onclick="showBriefing()">MỞ HỒ SƠ ĐIỀU TRA →</button>
+    </div>
+  </div>
+</section>
+
+<section id="briefing" class="screen">
+  <div class="wrap">
+    <div class="label">HƯỚNG DẪN ĐIỀU TRA</div>
+    <h2 class="case-title">Mười hồ sơ. Mười thử thách.</h2>
+    <div class="panel">
+      <p class="muted">
+        Bạn là điều tra viên của NOIR. Mỗi hồ sơ được xây dựng từ một
+        vụ án có thật. Đọc kỹ bối cảnh, phân tích các dữ kiện rồi trả lời
+        hai câu hỏi ở mỗi màn. Độ khó tăng dần và những câu sau sẽ yêu cầu
+        bạn kết nối nhiều manh mối cùng lúc.
+      </p>
+      <div class="case-meta">
+        <span class="tag">10 MÀN CHƠI</span>
+        <span class="tag">20 CÂU HỎI</span>
+        <span class="tag">CÓ GIẢI THÍCH ĐÁP ÁN</span>
+        <span class="tag">LƯU TIẾN ĐỘ TRONG PHIÊN CHƠI</span>
+      </div>
+      <p class="muted">
+        Lưu ý: Một số vụ án vẫn chưa được giải quyết. Trong những màn đó,
+        nhiệm vụ của bạn là xác định điều gì được chứng minh, điều gì chỉ
+        là giả thuyết, chứ không tự ý kết tội một người.
+      </p>
+      <button class="primary" onclick="startGame()">BẮT ĐẦU MÀN 1 →</button>
+    </div>
+    <div class="levelgrid" id="levelGrid"></div>
+  </div>
+</section>
+
+<section id="game" class="screen">
+  <div class="wrap">
+    <div class="gamegrid">
+      <aside>
+        <div class="panel">
+          <div class="label">HỒ SƠ ĐANG XỬ LÝ</div>
+          <div class="stat"><span>Màn hiện tại</span><strong id="levelStat">01 / 10</strong></div>
+          <div class="stat"><span>Điểm điều tra</span><strong id="scoreStat">0</strong></div>
+          <div class="stat"><span>Trả lời đúng</span><strong id="correctStat">0</strong></div>
+          <div class="stat"><span>Câu hỏi</span><strong id="questionStat">01 / 02</strong></div>
+          <div class="track"><div class="fill" id="progress"></div></div>
+          <div class="label">DANH SÁCH HỒ SƠ</div>
+          <div class="case-list" id="caseList"></div>
+        </div>
+        <div class="character">
+          <div class="portrait">
+            <svg viewBox="0 0 80 100" aria-label="Chân dung điều tra viên minh họa">
+              <path d="M10 100 Q12 65 27 62 L53 62 Q70 70 72 100" fill="#172438"/>
+              <path d="M23 39 Q20 10 40 9 Q63 10 58 43 L55 63 L25 63Z" fill="#25252a"/>
+              <ellipse cx="40" cy="42" rx="18" ry="24" fill="#c99e7d"/>
+              <path d="M22 37 Q21 10 42 12 Q59 13 59 36 L50 28 L28 29Z" fill="#171c24"/>
+              <path d="M31 43 L37 43 M44 43 L50 43" stroke="#25252a" stroke-width="2"/>
+              <path d="M37 54 Q42 57 47 53" stroke="#754f43" fill="none" stroke-width="1.5"/>
+              <path d="M30 64 L40 77 L51 64" fill="#d7b36b"/>
+            </svg>
+            <div class="scan"></div>
+          </div>
+          <div><strong>ĐIỀU TRA VIÊN NOIR</strong><p id="characterText">Hãy đọc kỹ từng chứng cứ. Đừng vội kết luận.</p></div>
+        </div>
+      </aside>
+
+      <main class="panel mainpanel">
+        <div class="qtop">
+          <div class="label" id="caseNumber">CASE 01 / 10</div>
+          <div class="tag" id="difficulty">ĐỘ KHÓ: DỄ</div>
+        </div>
+        <h2 class="case-title" id="caseName">Hồ sơ</h2>
+        <p class="muted" id="caseIntro"></p>
+        <div class="case-meta" id="caseTags"></div>
+        <div class="character">
+          <div class="portrait" id="casePortrait"></div>
+          <div><strong id="witnessName">HỒ SƠ NHÂN VẬT</strong><p id="witnessText">Dữ kiện vụ án sẽ xuất hiện tại đây.</p></div>
+        </div>
+        <div class="qtop" style="margin-top:25px">
+          <div class="label" id="qNumber">CÂU HỎI 01 / 02</div>
+          <div class="tag">ĐỌC KỸ TRƯỚC KHI TRẢ LỜI</div>
+        </div>
+        <div class="question" id="questionText"></div>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="primary next" id="nextBtn" onclick="nextQuestion()">TIẾP TỤC →</button>
+        <div class="clues">
+          <h3>✦ SỔ TAY CHỨNG CỨ</h3>
+          <div id="clueList" class="muted">Chưa có ghi chú.</div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<section id="endLevel" class="screen">
+  <div class="result">
+    <div class="eyebrow">HỒ SƠ ĐÃ ĐƯỢC PHÂN TÍCH</div>
+    <div style="font-size:55px">📁</div>
+    <h2 id="endTitle">Hoàn thành hồ sơ</h2>
+    <p class="muted" id="endText"></p>
+    <div class="score" id="endScore">0</div>
+    <p class="muted">ĐIỂM CỦA HỒ SƠ</p>
+    <button class="primary" onclick="continueGame()">MỞ HỒ SƠ TIẾP THEO →</button>
+  </div>
+</section>
+
+<section id="final" class="screen">
+  <div class="result">
+    <div class="eyebrow">NOIR DETECTIVE AGENCY</div>
+    <div style="font-size:60px">🏆</div>
+    <h2>CHIẾN DỊCH HOÀN TẤT</h2>
+    <div class="score" id="totalScore">0</div>
+    <p class="muted" id="rankText"></p>
+    <div class="levelgrid" id="finalLevels"></div>
+    <button class="primary" onclick="restart()">ĐIỀU TRA LẠI TỪ ĐẦU</button>
+    <button class="secondary" onclick="showHome()">TRANG CHỦ</button>
+  </div>
+</section>
+
+<script>
+const cases = [
+{
+ name:"Vụ bắt cóc Lindbergh",
+ year:"1932 · Hoa Kỳ",
+ difficulty:"DỄ",
+ type:"Bắt cóc · Điều tra chứng cứ",
+ intro:"Ngày 1/3/1932, con trai 20 tháng tuổi của phi công Charles Lindbergh bị bắt cóc khỏi phòng ngủ tầng hai tại nhà riêng ở Hopewell, New Jersey. Một lá thư đòi tiền chuộc được tìm thấy trên bậu cửa sổ. Vụ án tạo ra cuộc điều tra quy mô lớn và sau đó dẫn tới phiên tòa xét xử Bruno Richard Hauptmann.",
+ witness:"HỒ SƠ HIỆN TRƯỜNG",
+ witnessText:"Các điều tra viên thu thập thư đòi tiền chuộc, dấu vết tại hiện trường, chiếc thang được cho là dùng trong vụ bắt cóc và tiền chuộc xuất hiện trở lại trong lưu thông.",
+ tags:["1932","LÁ THƯ ĐÒI TIỀN","THANG GỖ"],
+ clues:["Lá thư đòi 50.000 USD được tìm thấy tại phòng trẻ.","Các thư tiếp theo được đối chiếu chữ viết.","Một số đặc điểm của chiếc thang được đưa ra làm chứng cứ tại phiên tòa."],
+ questions:[
+  {
+   text:"Khi khám nghiệm phòng ngủ, điều tra viên tìm thấy một lá thư đòi tiền chuộc trên bậu cửa sổ. Những lá thư tiếp theo được gửi tới gia đình và người trung gian. Trong một cuộc điều tra như vậy, vì sao việc bảo quản bản gốc của từng lá thư, so sánh nét chữ, cách viết sai chính tả và vật liệu giấy lại quan trọng hơn việc chỉ đọc nội dung đe dọa?",
+   opts:["Vì các đặc điểm vật lý và chữ viết có thể giúp so sánh nguồn gốc giữa những lá thư, nhưng vẫn cần giám định và chứng cứ bổ trợ.","Vì nội dung đòi tiền chuộc tự nó chứng minh người viết là kẻ bắt cóc.","Vì mọi lá thư có lỗi chính tả giống nhau chắc chắn do cùng một người viết.","Vì giấy và mực không có giá trị trong điều tra."],
+   a:0,why:"Đúng. So sánh chữ viết, vật liệu và đặc điểm chế tác có thể tạo ra manh mối liên kết. Tuy nhiên, kết luận phải dựa trên toàn bộ hồ sơ và phương pháp giám định, không chỉ một dấu hiệu."
+  },
+  {
+   text:"Trong quá trình điều tra, tiền chuộc được phát hiện lưu thông trở lại. Một số tờ tiền có thể được lần theo thông qua số sê-ri và hồ sơ ngân hàng. Nếu một khoản tiền có số sê-ri trùng với tiền chuộc được sử dụng tại một địa điểm, kết luận nào là thận trọng và hợp lý nhất?",
+   opts:["Người đang giữ tiền chắc chắn là kẻ bắt cóc.","Số sê-ri là một mối liên hệ đáng điều tra; cần truy nguồn giao dịch, người chuyển giao và các chứng cứ độc lập khác.","Tiền có thể bị loại khỏi hồ sơ vì ai cũng sử dụng tiền mặt.","Người phát hiện tiền tự động trở thành nghi phạm chính."],
+   a:1,why:"Chính xác. Tiền chuộc có thể tạo ra dấu vết truy nguyên, nhưng người sở hữu sau đó không nhất thiết là người thực hiện vụ bắt cóc."
+  }
+ ]
+},
+{
+ name:"Cuộc vượt ngục Alcatraz",
+ year:"1962 · San Francisco",
+ difficulty:"DỄ – TRUNG BÌNH",
+ type:"Vượt ngục · Tái dựng kế hoạch",
+ intro:"Rạng sáng 12/6/1962, nhân viên nhà tù Alcatraz phát hiện Frank Morris cùng hai anh em John và Clarence Anglin biến mất khỏi phòng giam. Trên giường là những chiếc đầu giả được làm tinh vi để đánh lừa lính gác. Những người này đã chuẩn bị một kế hoạch vượt ngục trong nhiều tháng. Số phận của họ đến nay vẫn chưa được xác nhận.",
+ witness:"BỘ PHẬN KHÁM NGHIỆM NHÀ TÙ",
+ witnessText:"Đầu giả, lỗ thông hơi bị tháo, dụng cụ tự chế, mái chèo và áo phao tự làm được tìm thấy trong quá trình điều tra.",
+ tags:["1962","ĐẦU GIẢ","BÈ TỰ CHẾ"],
+ clues:["Ba tù nhân biến mất; Allen West không thoát khỏi phòng giam.","Đầu giả được đặt trên giường để đánh lừa kiểm tra ban đêm.","Các vật dụng tự chế cho thấy có sự chuẩn bị lâu dài."],
+ questions:[
+  {
+   text:"Trong lần kiểm tra buồng giam buổi sáng, lính gác nhìn thấy những hình đầu người trên gối và ban đầu tưởng tù nhân vẫn đang ngủ. Khi kiểm tra kỹ, họ phát hiện đó là đầu giả làm từ vật liệu tạo hình, sơn màu da và tóc thật. Chi tiết này cho thấy yếu tố nào trong kế hoạch vượt ngục?",
+   opts:["Những người vượt ngục chỉ dựa vào may mắn.","Họ đã nghiên cứu quy trình kiểm tra và tạo vật đánh lừa thị giác để trì hoãn thời điểm phát hiện.","Lính gác chắc chắn đã tham gia kế hoạch.","Đầu giả chứng minh họ đã ra khỏi đảo an toàn."],
+   a:1,why:"Đúng. Đầu giả khai thác thói quen kiểm tra ban đêm, giúp tạo thêm thời gian trước khi cuộc vượt ngục bị phát hiện."
+  },
+  {
+   text:"Điều tra viên tìm thấy mái chèo tự chế, áo phao làm từ áo mưa và dấu vết cho thấy một chiếc bè cao su đã được chế tạo. Tuy nhiên, không có bằng chứng xác nhận ba người đã cập bờ an toàn. Khi đánh giá vụ án, cách phân biệt nào chính xác nhất?",
+   opts:["Việc chế tạo bè chứng minh họ sống sót.","Không tìm thấy thi thể nghĩa là chắc chắn họ đã thành công.","Các vật dụng chứng minh họ chuẩn bị vượt vịnh, nhưng không xác nhận kết quả cuối cùng của chuyến vượt biển.","Bè tự chế không liên quan tới kế hoạch."],
+   a:2,why:"Chính xác. Có thể tái dựng được một phần kế hoạch, nhưng số phận của Morris và hai anh em Anglin vẫn là điều chưa được xác nhận."
+  }
+ ]
+},
+{
+ name:"Vụ cướp máy bay D.B. Cooper",
+ year:"1971 · Hoa Kỳ",
+ difficulty:"TRUNG BÌNH",
+ type:"Không tặc · Dấu vết vật chứng",
+ intro:"Ngày 24/11/1971, một người dùng tên Dan Cooper mua vé một chiều cho chuyến bay Northwest Orient Flight 305 từ Portland tới Seattle. Người này thông báo có bom, yêu cầu tiền chuộc 200.000 USD và bốn chiếc dù. Sau khi hành khách được thả tại Seattle, máy bay cất cánh lần nữa. Cooper nhảy khỏi máy bay giữa Seattle và Reno, rồi biến mất.",
+ witness:"HỒ SƠ FBI · NORJAK",
+ witnessText:"Một chiếc cà vạt được để lại trên máy bay. Năm 1980, một phần tiền chuộc có số sê-ri trùng khớp được tìm thấy gần sông Columbia.",
+ tags:["1971","200.000 USD","DÙ NHẢY"],
+ clues:["Tên trên vé là Dan Cooper; tên D.B. Cooper phổ biến do báo chí.","Một phần tiền chuộc được tìm thấy năm 1980.","Danh tính và số phận người nhảy dù chưa được xác định."],
+ questions:[
+  {
+   text:"Người đàn ông mua vé bằng tiền mặt, dùng tên Dan Cooper và yêu cầu bốn chiếc dù. Sau khi nhận tiền cùng dù, ông ta cho hành khách rời máy bay nhưng yêu cầu một số thành viên phi hành đoàn tiếp tục bay. Vì sao việc yêu cầu nhiều chiếc dù có thể được xem là một chi tiết đáng chú ý khi phân tích kế hoạch?",
+   opts:["Nó cho thấy người này muốn tạo thêm lựa chọn hoặc làm phức tạp đánh giá của nhà chức trách, nhưng động cơ cụ thể không thể kết luận chỉ từ yêu cầu đó.","Nó chứng minh người này là vận động viên nhảy dù chuyên nghiệp.","Nó chứng minh có ba đồng phạm trên máy bay.","Nó chứng minh chiếc bom là thật."],
+   a:0,why:"Đúng. Yêu cầu nhiều dù là dữ kiện có thật, nhưng mọi suy luận về mục đích đều cần được xem là giả thuyết chứ không phải sự thật đã chứng minh."
+  },
+  {
+   text:"Năm 1980, một cậu bé tìm thấy khoảng 5.800 USD tiền giấy mục nát bên bờ sông Columbia. Các số sê-ri khớp với tiền chuộc trong vụ không tặc. Phát hiện này tạo ra một câu hỏi lớn: số tiền đã tới đó bằng cách nào? Tuy nhiên, nó không trực tiếp cho biết Cooper còn sống hay đã chết. Kết luận nào hợp lý nhất?",
+   opts:["Cooper chắc chắn đã chết tại nơi tìm thấy tiền.","Cooper chắc chắn đã sống sót và quay lại lấy tiền.","Phát hiện tiền là manh mối quan trọng về hành trình của tiền, nhưng chưa đủ để xác định số phận Cooper.","Người tìm thấy tiền là thủ phạm."],
+   a:2,why:"Chính xác. Tiền chuộc xác nhận liên hệ với vụ án, nhưng không giải đáp chắc chắn điều gì xảy ra với Cooper."
+  }
+ ]
+},
+{
+ name:"Vụ án Black Dahlia",
+ year:"1947 · Los Angeles",
+ difficulty:"TRUNG BÌNH",
+ type:"Án mạng · Pháp y và hiện trường",
+ intro:"Ngày 15/1/1947, thi thể Elizabeth Short, 22 tuổi, được phát hiện tại một khu đất trống ở Los Angeles. Hiện trường không có lượng máu tương ứng với thương tích, khiến điều tra viên nghi ngờ nạn nhân đã bị sát hại ở một địa điểm khác. FBI hỗ trợ nhận dạng nạn nhân bằng dấu vân tay. Vụ án chưa được phá giải.",
+ witness:"HỒ SƠ PHÁP Y",
+ witnessText:"Dấu vân tay giúp xác định danh tính nạn nhân rất nhanh. Các dấu vết tại nơi phát hiện thi thể được so sánh với giả thuyết về địa điểm gây án.",
+ tags:["1947","DẤU VÂN TAY","HIỆN TRƯỜNG"],
+ clues:["Nạn nhân được xác định là Elizabeth Short.","Hiện trường không có lượng máu tương ứng với thương tích.","Hung thủ chưa được xác định."],
+ questions:[
+  {
+   text:"Một đặc điểm nổi bật trong hồ sơ là hiện trường không có lượng máu tương ứng với những thương tích nghiêm trọng trên thi thể. Khi đánh giá dấu vết này, điều tra viên nên làm gì trước khi kết luận nạn nhân bị sát hại ở nơi khác?",
+   opts:["Coi đó là bằng chứng tuyệt đối rằng thi thể được chuyển tới.","Đối chiếu kết quả khám nghiệm, đặc điểm hiện trường, khả năng dịch chuyển và những yếu tố có thể ảnh hưởng đến dấu vết.","Kết luận người đầu tiên phát hiện thi thể có liên quan.","Bỏ qua kết quả pháp y."],
+   a:1,why:"Đúng. Sự thiếu vắng dấu vết có thể hỗ trợ một giả thuyết, nhưng cần đặt cạnh kết quả pháp y và toàn bộ bối cảnh."
+  },
+  {
+   text:"FBI nhận được dấu vân tay mờ và sử dụng hệ thống lưu trữ để hỗ trợ nhận dạng. Danh tính Elizabeth Short được xác định trong khoảng 56 phút. Tại sao nhận dạng nạn nhân là bước nền tảng nhưng không đồng nghĩa với việc phá được vụ án?",
+   opts:["Vì nhận dạng chỉ trả lời nạn nhân là ai; điều tra còn phải xác định diễn biến, địa điểm, người liên quan và chứng cứ về thủ phạm.","Vì dấu vân tay không bao giờ có giá trị.","Vì sau khi nhận dạng nạn nhân, vụ án tự động khép lại.","Vì nhận dạng nạn nhân chứng minh động cơ gây án."],
+   a:0,why:"Chính xác. Nhận dạng nạn nhân mở ra hướng điều tra, nhưng không tự động xác định hung thủ hay động cơ."
+  }
+ ]
+},
+{
+ name:"Vụ trộm bảo tàng Gardner",
+ year:"1990 · Boston",
+ difficulty:"TRUNG BÌNH – KHÓ",
+ type:"Trộm cắp nghệ thuật · Hiện trường",
+ intro:"Rạng sáng 18/3/1990, hai người mặc trang phục cảnh sát gõ cửa bảo tàng Isabella Stewart Gardner ở Boston, nói rằng họ đang xử lý một vụ gây rối. Sau khi vào trong, họ khống chế nhân viên bảo vệ và lấy đi 13 tác phẩm nghệ thuật trong khoảng 81 phút. Nhiều khung tranh vẫn còn treo trống trên tường.",
+ witness:"NHÂN VIÊN BẢO TÀNG",
+ witnessText:"Những khung tranh rỗng, thời gian các đối tượng ở bên trong và cách họ tiếp cận nhân viên bảo vệ là những dữ kiện quan trọng.",
+ tags:["1990","13 TÁC PHẨM","81 PHÚT"],
+ clues:["Hai người giả danh cảnh sát để được vào bảo tàng.","13 tác phẩm bị lấy đi.","Các khung tranh trống được giữ lại tại vị trí cũ."],
+ questions:[
+  {
+   text:"Hai người mặc đồng phục cảnh sát xuất hiện vào ban đêm và nói rằng họ phản hồi một vụ gây rối. Nhân viên bảo vệ đã cho họ vào. Trong phân tích an ninh, đây là ví dụ điển hình của việc khai thác yếu tố nào?",
+   opts:["Sự tin tưởng vào danh tính và thẩm quyền được thể hiện qua trang phục, lời nói và tình huống khẩn cấp.","Một lỗ hổng kỹ thuật trong hệ thống camera đã được chứng minh.","Một nhân viên bảo vệ chắc chắn là đồng phạm.","Một tác phẩm nghệ thuật tự biến mất."],
+   a:0,why:"Đúng. Việc giả danh lực lượng chức năng khai thác sự tin tưởng và quy trình xác minh danh tính. Đây là bài học về kiểm soát ra vào."
+  },
+  {
+   text:"Những kẻ trộm lấy đi 13 tác phẩm nhưng để lại các khung tranh lớn, trong đó có những khung vẫn treo trên tường. Khi lập hồ sơ tài sản bị đánh cắp, tại sao việc ghi lại vị trí, kích thước, khung tranh và cách bố trí ban đầu có ý nghĩa?",
+   opts:["Chỉ để trang trí lại phòng trưng bày.","Để xác định tác phẩm nào bị lấy, tái dựng hành vi tại hiện trường và hỗ trợ nhận diện tác phẩm khi chúng xuất hiện trên thị trường.","Để chứng minh người trộm không biết giá trị tranh.","Để xác định ngay nơi cất giấu tranh."],
+   a:1,why:"Chính xác. Hồ sơ chi tiết về từng tác phẩm và vị trí trưng bày có thể hỗ trợ truy tìm, đối chiếu và xác định nguồn gốc."
+  }
+ ]
+},
+{
+ name:"Vụ Unabomber",
+ year:"1978–1996 · Hoa Kỳ",
+ difficulty:"KHÓ",
+ type:"Điều tra liên bang · Ngôn ngữ và vật chứng",
+ intro:"Trong gần hai thập kỷ, một loạt thiết bị nổ được gửi tới nhiều người và tổ chức tại Mỹ. Cuộc điều tra kéo dài với lượng lớn chứng cứ vật lý, thư từ và dữ liệu. Năm 1996, Theodore Kaczynski bị bắt tại căn cabin ở Montana. Điều tra viên tìm thấy linh kiện chế tạo bom, hàng chục nghìn trang nhật ký viết tay và một thiết bị nổ chưa gửi đi.",
+ witness:"ĐIỀU TRA VIÊN LIÊN BANG",
+ witnessText:"Vụ án cho thấy sức mạnh của việc kết hợp vật chứng, phân tích ngôn ngữ, thông tin công chúng và khám xét có căn cứ.",
+ tags:["1978–1996","NHẬT KÝ","PHÂN TÍCH NGÔN NGỮ"],
+ clues:["Nhiều vụ nổ có đặc điểm liên hệ với nhau.","Bản thảo và cách dùng ngôn ngữ trở thành hướng điều tra.","Cabin chứa linh kiện, nhật ký và thiết bị chưa gửi."],
+ questions:[
+  {
+   text:"Các vụ việc kéo dài qua nhiều năm và xảy ra tại nhiều địa điểm. Điều tra viên phải phân biệt những vụ việc có liên quan với các sự kiện độc lập. Phương pháp nào có giá trị nhất khi xây dựng mối liên hệ giữa các vụ án?",
+   opts:["Chỉ dựa vào khoảng cách địa lý giữa các địa điểm.","So sánh phương thức hoạt động, đặc điểm vật chứng, thời gian, mục tiêu và các dấu hiệu lặp lại.","Giả định tất cả vụ nổ đều do cùng một người.","Chỉ dựa vào lời đồn trên báo."],
+   a:1,why:"Đúng. Phân tích mẫu hình giúp xác định các vụ việc có khả năng liên quan, nhưng cần kiểm tra từng dấu hiệu bằng chứng cứ."
+  },
+  {
+   text:"Sau khi bản tuyên ngôn được công bố, một người thân nhận ra phong cách diễn đạt có điểm tương đồng với người mà họ nghi ngờ và liên hệ với nhà chức trách. Sau đó, điều tra viên tiếp tục kiểm tra các tài liệu, vật chứng và thông tin tại cabin. Bài học điều tra nào phù hợp nhất?",
+   opts:["Một người thân nhận ra cách viết là đủ để kết tội.","Phân tích ngôn ngữ có thể tạo ra đầu mối quan trọng, nhưng phải được kiểm chứng bằng chứng cứ độc lập và thủ tục pháp lý.","Văn bản dài luôn chứng minh tác giả là tội phạm.","Không cần khám xét hay kiểm tra vật chứng."],
+   a:1,why:"Chính xác. Đầu mối từ ngôn ngữ giúp thu hẹp hướng điều tra, còn chứng cứ vật lý và quá trình pháp lý mới giúp củng cố vụ án."
+  }
+ ]
+},
+{
+ name:"Vụ án Osage",
+ year:"1921–1920s · Oklahoma",
+ difficulty:"KHÓ",
+ type:"Âm mưu · Tài chính và động cơ",
+ intro:"Sau khi dầu mỏ được phát hiện trên vùng đất của người Osage, các khoản tiền bản quyền khiến nhiều thành viên Osage trở nên giàu có. Từ năm 1921, hàng loạt người Osage bị sát hại trong một chuỗi tội ác được báo chí gọi là Reign of Terror. Anna Brown được tìm thấy đã chết tại một khe núi. Những cái chết tiếp theo khiến cuộc điều tra mở rộng thành một vụ án âm mưu lớn.",
+ witness:"HỒ SƠ ĐIỀU TRA OSAGE",
+ witnessText:"Các khoản quyền lợi dầu mỏ, quan hệ gia đình, quyền thừa kế và chuỗi cái chết bất thường là những hướng cần được kiểm tra.",
+ tags:["1921","OSAGE NATION","ÂM MƯU"],
+ clues:["Anna Brown được tìm thấy tại một khe núi năm 1921.","Nhiều người Osage lần lượt thiệt mạng.","Động cơ tài chính và quyền lợi thừa kế trở thành hướng điều tra quan trọng."],
+ questions:[
+  {
+   text:"Sau khi dầu mỏ được phát hiện, người Osage nhận các khoản tiền bản quyền gắn với quyền lợi được gọi là head rights. Khi nhiều người có quyền lợi này lần lượt chết, điều tra viên không nên xem từng vụ việc như những sự kiện riêng lẻ. Vì sao việc lập bản đồ quan hệ gia đình, quyền thừa kế và lợi ích tài chính có thể giúp nhận diện một âm mưu?",
+   opts:["Vì nó giúp xác định ai có thể hưởng lợi từ các cái chết, từ đó tạo hướng điều tra cần kiểm chứng.","Vì người thừa kế luôn là thủ phạm.","Vì lợi ích tài chính tự nó chứng minh hành vi giết người.","Vì mọi cái chết trong cùng cộng đồng đều do một người gây ra."],
+   a:0,why:"Đúng. Động cơ tài chính có thể giúp tìm ra mối liên hệ, nhưng không thể thay thế chứng cứ về hành vi và sự tham gia."
+  },
+  {
+   text:"Trong vụ án, các cái chết xảy ra ở nhiều thời điểm, có những người liên quan đến nhau qua quan hệ họ hàng và quyền lợi tài sản. Nếu chỉ tập trung vào hung thủ trực tiếp trong từng hiện trường, điều tra viên có thể bỏ sót điều gì?",
+   opts:["Không bỏ sót gì vì mỗi vụ án đều độc lập.","Khả năng tồn tại một mạng lưới lợi ích, người hỗ trợ, người che giấu và những vụ việc có cùng động cơ.","Việc các nạn nhân có quan hệ họ hàng không quan trọng.","Chỉ cần tìm một nhân chứng duy nhất."],
+   a:1,why:"Chính xác. Điều tra âm mưu cần xem xét cả mạng lưới quan hệ và lợi ích, không chỉ người trực tiếp thực hiện từng hành vi."
+  }
+ ]
+},
+{
+ name:"Vụ án Zodiac",
+ year:"1968–1969 · California",
+ difficulty:"RẤT KHÓ",
+ type:"Thư nặc danh · Mật mã",
+ intro:"Cuối thập niên 1960, một kẻ tự xưng Zodiac gửi thư và mật mã tới các tòa soạn báo ở California, đồng thời nhận trách nhiệm về nhiều vụ tấn công. Một mật mã nổi tiếng được hai người giải trong năm 1969, nhưng việc giải được thông điệp không giúp xác định danh tính hung thủ. Vụ án vẫn chưa có kết luận chính thức về danh tính Zodiac.",
+ witness:"CHUYÊN GIA MẬT MÃ",
+ witnessText:"Thư nặc danh có thể chứa thông tin thật, thông tin đánh lạc hướng hoặc lời tự nhận không thể kiểm chứng. Cần tách việc giải mã khỏi việc xác định tác giả.",
+ tags:["1968–1969","MẬT MÃ","THƯ NẶC DANH"],
+ clues:["Một mật mã nổi tiếng được giải năm 1969.","Giải được nội dung không đồng nghĩa xác minh được người viết.","Danh tính Zodiac vẫn chưa được xác định chính thức."],
+ questions:[
+  {
+   text:"Một mật mã được gửi tới báo chí và sau đó được giải bởi một cặp vợ chồng không chuyên về điều tra. Nội dung của nó chứa lời tự thuật và những tuyên bố của người gửi. Tại sao việc giải đúng mật mã vẫn chưa đủ để xác định người viết?",
+   opts:["Vì bất kỳ ai cũng có thể giải mã.","Vì nội dung do người gửi tự tuyên bố chưa phải bằng chứng xác minh danh tính; cần đối chiếu với dấu vết độc lập.","Vì mật mã không thể chứa thông tin thật.","Vì người giải mã chính là nghi phạm."],
+   a:1,why:"Đúng. Giải mã là khôi phục nội dung. Xác thực tác giả là một vấn đề khác, cần chứng cứ độc lập."
+  },
+  {
+   text:"Trong một vụ án có thư nặc danh, người gửi có thể tự nhận đã thực hiện nhiều hành vi nhằm tạo tiếng vang. Nếu một lá thư chứa chi tiết mà công chúng chưa biết, điều tra viên cần làm gì để đánh giá giá trị của chi tiết đó?",
+   opts:["Tin toàn bộ nội dung vì nó được viết bởi hung thủ.","Kiểm tra chi tiết có thực sự chưa công bố, có thể được biết bằng cách nào và có được xác nhận độc lập hay không.","Công bố ngay mọi chi tiết để tìm người viết.","Kết luận tác giả là người có chữ viết đẹp."],
+   a:1,why:"Chính xác. Chi tiết nội bộ có thể có giá trị, nhưng phải xác định nguồn thông tin và loại trừ khả năng tiếp cận từ nguồn khác."
+  }
+ ]
+},
+{
+ name:"Vụ cướp Brink's",
+ year:"1950 · Boston",
+ difficulty:"RẤT KHÓ",
+ type:"Cướp có tổ chức · Đồng phạm",
+ intro:"Ngày 17/1/1950, một nhóm người đeo mặt nạ thực hiện vụ cướp tại cơ sở Brink's ở Boston, lấy đi một lượng tiền mặt và chứng khoán lớn. Vụ án trở thành một trong những cuộc điều tra tội phạm nổi tiếng của thời kỳ đó. Việc truy tìm không chỉ tập trung vào người trực tiếp vào hiện trường mà còn vào quá trình chuẩn bị, tiêu thụ tài sản và mạng lưới hỗ trợ.",
+ witness:"NHÓM ĐIỀU TRA TÀI CHÍNH",
+ witnessText:"Một vụ cướp có tổ chức thường để lại dấu vết ở nhiều giai đoạn: chuẩn bị, vận chuyển, phân chia và tìm cách sử dụng tài sản.",
+ tags:["1950","NHÓM CÓ TỔ CHỨC","TRUY NGUỒN TÀI SẢN"],
+ clues:["Nhóm cướp đeo mặt nạ.","Vụ án cần điều tra cả người hỗ trợ ngoài hiện trường.","Dòng tiền và tài sản sau vụ cướp có thể tạo ra đầu mối."],
+ questions:[
+  {
+   text:"Sau một vụ cướp có tổ chức, người trực tiếp xâm nhập hiện trường có thể không phải là người lập kế hoạch, cung cấp phương tiện hoặc cất giấu tài sản. Nếu điều tra viên chỉ tìm người xuất hiện trong lời khai nhân chứng tại hiện trường, điểm yếu của cách tiếp cận đó là gì?",
+   opts:["Có thể bỏ qua mạng lưới đồng phạm và những người hỗ trợ không trực tiếp có mặt khi vụ cướp xảy ra.","Nhân chứng luôn nhận diện được toàn bộ nhóm.","Người hỗ trợ không thể bị truy tố.","Kẻ cướp không bao giờ sử dụng phương tiện."],
+   a:0,why:"Đúng. Điều tra tội phạm có tổ chức cần xem xét vai trò khác nhau của từng người, từ chuẩn bị đến tiêu thụ tài sản."
+  },
+  {
+   text:"Một khoản tài sản bị đánh cắp xuất hiện trở lại sau một thời gian dài. Điều tra viên phát hiện người đang sở hữu nó có quan hệ với một người từng bị nghi ngờ, nhưng chưa có bằng chứng về việc họ biết nguồn gốc bất hợp pháp. Cách xử lý nào hợp lý nhất?",
+   opts:["Kết tội người sở hữu ngay lập tức.","Bỏ qua vì tài sản đã được tìm thấy.","Truy nguyên thời điểm, cách thức chuyển giao, giao dịch và bằng chứng cho thấy người sở hữu có biết hoặc tham gia hay không.","Kết luận toàn bộ nhóm cướp đã bị bắt."],
+   a:2,why:"Chính xác. Sở hữu tài sản đáng ngờ là một đầu mối, nhưng cần làm rõ nguồn gốc, thời điểm và nhận thức của người sở hữu."
+  }
+ ]
+},
+{
+ name:"Vụ đánh bom Boston Marathon",
+ year:"2013 · Boston",
+ difficulty:"CỰC KHÓ",
+ type:"Điều tra đa nguồn · Tổng hợp dữ liệu",
+ intro:"Ngày 15/4/2013, hai quả bom phát nổ gần vạch đích Boston Marathon, khiến ba người thiệt mạng và hàng trăm người bị thương. Cuộc điều tra huy động nhiều cơ quan, sử dụng hình ảnh camera, lời khai nhân chứng và dấu vết vật chứng. Đây là ví dụ điển hình về việc tổng hợp dữ liệu từ rất nhiều nguồn để xác định nghi phạm.",
+ witness:"TRUNG TÂM PHÂN TÍCH DỮ LIỆU",
+ witnessText:"Hình ảnh camera, video của người dân, lời khai và vật chứng cần được đối chiếu theo dòng thời gian và vị trí.",
+ tags:["2013","CAMERA","ĐIỀU TRA ĐA NGUỒN"],
+ clues:["Vụ nổ xảy ra gần vạch đích cuộc thi.","Nhiều nguồn hình ảnh và lời khai được thu thập.","Việc xác minh chéo dữ liệu giúp thu hẹp hướng điều tra."],
+ questions:[
+  {
+   text:"Sau vụ nổ, cơ quan điều tra phải xử lý lượng lớn hình ảnh từ camera an ninh, video của người tham dự, lời khai và dữ liệu hiện trường. Một người xuất hiện trong nhiều đoạn video không tự động là thủ phạm. Phương pháp nào giúp đánh giá một đối tượng có liên quan một cách có hệ thống nhất?",
+   opts:["Chọn người xuất hiện nhiều nhất trên video.","Đối chiếu mốc thời gian, vị trí, hành vi trước và sau sự kiện, nhận dạng hình ảnh và các vật chứng độc lập.","Dựa vào biểu cảm khuôn mặt để suy đoán.","Chỉ sử dụng một đoạn video có chất lượng thấp."],
+   a:1,why:"Đúng. Phân tích đa nguồn giúp kiểm tra chéo thông tin và tránh kết luận chỉ từ một hình ảnh đơn lẻ."
+  },
+  {
+   text:"Một nhóm điều tra có hai nguồn dữ liệu: camera ghi nhận một người ở gần địa điểm xảy ra vụ việc, còn lời khai nhân chứng đặt người đó ở một vị trí khác cùng thời điểm. Thay vì bỏ qua một nguồn, điều tra viên nên kiểm tra điều gì trước tiên?",
+   opts:["Độ chính xác đồng hồ của camera, thời gian ghi nhận lời khai, góc quan sát, khả năng nhận dạng và khoảng cách di chuyển.","Chọn nguồn dữ liệu mà điều tra viên thích hơn.","Kết luận nhân chứng cố tình nói dối.","Xóa đoạn video vì lời khai quan trọng hơn."],
+   a:0,why:"Chính xác. Sai lệch thời gian, góc nhìn và khả năng nhận diện đều có thể tạo ra mâu thuẫn giả. Cần chuẩn hóa dữ liệu trước khi kết luận."
+  }
+ ]
+}
+];
+
+let level=0, qIndex=0, score=0, correct=0;
+let levelScore=0, answered=false, notes=[];
+let completed=Array(10).fill(false);
+
+const $=id=>document.getElementById(id);
+
+function show(id){
+ document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+ $(id).classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function showBriefing(){show('briefing');renderLevelGrid();}
+function startGame(){level=0;qIndex=0;score=0;correct=0;completed=Array(10).fill(false);notes=[];loadLevel();}
+function renderLevelGrid(){
+ $('levelGrid').innerHTML=cases.map((c,i)=>`<div class="level ${i===0?'unlocked':''}"><b>${String(i+1).padStart(2,'0')}</b>${c.name}</div>`).join('');
+}
+function renderCaseList(){
+ $('caseList').innerHTML=cases.map((c,i)=>`
+ <div class="case-row ${i===level?'current':''} ${completed[i]?'done':''}">
+ <span class="num">${String(i+1).padStart(2,'0')}</span>
+ <span>${c.name}</span><span style="margin-left:auto">${completed[i]?'✓':i===level?'●':'🔒'}</span>
+ </div>`).join('');
+}
+function loadLevel(){
+ qIndex=0;levelScore=0;notes=[];
+ show('game');
+ renderLevel();
+}
+function renderLevel(){
+ const c=cases[level];
+ $('headerStatus').textContent=`HỒ SƠ ${String(level+1).padStart(2,'0')} / 10`;
+ $('levelStat').textContent=`${String(level+1).padStart(2,'0')} / 10`;
+ $('caseNumber').textContent=`CASE ${String(level+1).padStart(2,'0')} / 10`;
+ $('difficulty').textContent='ĐỘ KHÓ: '+c.difficulty;
+ $('caseName').textContent=c.name;
+ $('caseIntro').textContent=c.intro;
+ $('caseTags').innerHTML=c.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+ $('witnessName').textContent=c.witness;
+ $('witnessText').textContent=c.witnessText;
+ $('casePortrait').innerHTML=`
+ <svg viewBox="0 0 80 100">
+ <path d="M8 100 Q10 65 27 64 L54 64 Q72 70 74 100" fill="#24344a"/>
+ <path d="M22 42 Q18 12 42 10 Q64 12 59 46 L55 65 L25 65Z" fill="#24252b"/>
+ <ellipse cx="40" cy="43" rx="18" ry="23" fill="#c89b79"/>
+ <path d="M22 36 Q24 10 44 13 Q58 14 60 35 L50 27 L28 29Z" fill="#1c2028"/>
+ <path d="M30 43h7 M44 43h7" stroke="#20242a" stroke-width="2"/>
+ <path d="M36 55q5 3 10 0" stroke="#7c5144" fill="none"/>
+ </svg><div class="scan"></div>`;
+ $('characterText').textContent='Hãy phân tích hồ sơ '+(level+1)+'. Không được nhầm giả thuyết với chứng cứ.';
+ $('clueList').innerHTML=c.clues.map((x,i)=>`<div class="clue"><b style="color:var(--gold)">DỮ KIỆN ${i+1}</b><br>${x}</div>`).join('');
+ renderQuestion();
+ renderCaseList();
+ updateStats();
+}
+function renderQuestion(){
+ answered=false;
+ const c=cases[level],q=c.questions[qIndex];
+ $('qNumber').textContent=`CÂU HỎI ${String(qIndex+1).padStart(2,'0')} / 02`;
+ $('questionStat').textContent=`${String(qIndex+1).padStart(2,'0')} / 02`;
+ $('questionText').textContent=q.text;
+ $('options').innerHTML='';
+ q.opts.forEach((t,i)=>{
+  const b=document.createElement('button');
+  b.className='option';
+  b.textContent=String.fromCharCode(65+i)+'. '+t;
+  b.onclick=()=>answer(i,b);
+  $('options').appendChild(b);
+ });
+ $('feedback').style.display='none';
+ $('feedback').className='feedback';
+ $('nextBtn').style.display='none';
+}
+function answer(i,button){
+ if(answered)return;
+ answered=true;
+ const q=cases[level].questions[qIndex];
+ const all=[...document.querySelectorAll('.option')];
+ all.forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add('correct')});
+ const fb=$('feedback');
+ if(i===q.a){
+  score+=100;levelScore+=100;correct++;
+  button.classList.add('correct');
+  fb.className='feedback';
+  fb.innerHTML='<strong>✓ SUY LUẬN CHÍNH XÁC · +100 ĐIỂM</strong>'+q.why;
+ }else{
+  button.classList.add('wrong');
+  fb.className='feedback bad';
+  fb.innerHTML='<strong>✕ CHƯA CHÍNH XÁC</strong>'+q.why;
+ }
+ fb.style.display='block';
+ notes.push((i===q.a?'Đúng: ':'Cần xem lại: ')+q.why);
+ updateStats();
+ $('nextBtn').style.display='inline-block';
+ $('nextBtn').textContent=qIndex===1?'KHÉP LẠI HỒ SƠ →':'CÂU HỎI TIẾP THEO →';
+}
+function updateStats(){
+ $('scoreStat').textContent=score;
+ $('correctStat').textContent=correct;
+ $('progress').style.width=((level*2+qIndex+(answered?1:0))/20*100)+'%';
+}
+function nextQuestion(){
+ if(qIndex===0){qIndex=1;renderQuestion();updateStats();return;}
+ completed[level]=true;
+ $('endTitle').textContent=cases[level].name;
+ $('endText').textContent=`Bạn đã hoàn thành hồ sơ ${level+1}/10 với ${levelScore}/200 điểm. ${cases[level].difficulty==='CỰC KHÓ'?'Đây là màn điều tra đòi hỏi tổng hợp nhiều nguồn dữ liệu.':'Hãy tiếp tục rèn luyện khả năng phân tích và đối chiếu chứng cứ.'}`;
+ $('endScore').textContent=levelScore;
+ show('endLevel');
+}
+function continueGame(){
+ if(level===9){finish();return;}
+ level++;
+ loadLevel();
+}
+function finish(){
+ show('final');
+ $('totalScore').textContent=score;
+ let rank=score>=1800?'THÁM TỬ HUYỀN THOẠI':score>=1400?'CHUYÊN GIA ĐIỀU TRA':score>=1000?'ĐIỀU TRA VIÊN GIỎI':'TẬP SỰ NOIR';
+ $('rankText').textContent=`Cấp bậc của bạn: ${rank}. Bạn đã trả lời đúng ${correct}/20 câu hỏi.`;
+ $('finalLevels').innerHTML=cases.map((c,i)=>`<div class="level done"><b>✓ ${i+1}</b>${c.name}</div>`).join('');
+}
+function restart(){startGame();}
+function showHome(){show('home');}
+</script>
+</body>
+</html>
+
 
     
 
